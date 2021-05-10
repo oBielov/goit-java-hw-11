@@ -2,7 +2,6 @@ package multithread;
 
 import java.util.function.IntConsumer;
 
-
 /**
  * Class takes int number as a limiter and in range of tis limit
  * prints: "fizz" if number divisible by 3, "buzz" if number divisible by 5,

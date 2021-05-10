@@ -8,6 +8,7 @@ public class Main {
 
         counter.start();
         notifyer.start();
+
     }
 
 }

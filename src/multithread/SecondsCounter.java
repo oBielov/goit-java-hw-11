@@ -19,6 +19,7 @@ public class SecondsCounter extends Thread{
         return time;
     }
 
+
     /**
      * Until the timer reached limit passed as constructor argument
      * thread prints every second value of pseudo-timer stored in {@link #time} variable

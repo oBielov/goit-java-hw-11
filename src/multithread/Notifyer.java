@@ -5,6 +5,7 @@ package multithread;
  */
 public class Notifyer extends Thread{
 
+    //init
     SecondsCounter counter;
     int timer;
 
@@ -12,6 +13,7 @@ public class Notifyer extends Thread{
         this.counter = counter;
     }
 
+    //business
     @Override
     public void run(){
 
