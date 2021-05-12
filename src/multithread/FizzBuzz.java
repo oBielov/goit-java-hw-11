@@ -1,6 +1,7 @@
 package multithread;
 
-import java.util.function.IntConsumer;
+import java.util.Arrays;
+import java.util.StringJoiner;
 
 /**
  * Class takes int number as a limiter and in range of tis limit
@@ -12,6 +13,7 @@ public class FizzBuzz {
 
     private int number = 1;
     private final int limit;
+    StringJoiner join = new StringJoiner(", ");
 
     /**
      * Constructor takes int as argument to set a last number in loop
@@ -21,13 +23,12 @@ public class FizzBuzz {
     }
 
     /**
-     * Method to check if number is divisible by 3. Takes Runnable object as
-     * argument to print result after thread started and pass condition.
+     * Method to check if number is divisible by 3.
      */
-    public synchronized void fizz(Runnable print){
+    public synchronized void fizz(){
         while(number <= limit){
             if (number % 3 == 0 && number % 5 != 0){
-                print.run();
+                join.add("Fizz");
                 number++;
                 notifyAll();
             }
@@ -35,16 +36,16 @@ public class FizzBuzz {
                 threadWait();
             }
         }
+        System.out.println(join.toString());
     }
 
     /**
-     * Method to check if number is divisible by 5. Takes Runnable object as
-     * argument to print result after thread started and pass condition.
+     * Method to check if number is divisible by 5.
      */
-    public synchronized void buzz(Runnable print){
+    public synchronized void buzz(){
         while (number <= limit){
             if (number % 5 == 0 && number % 3 != 0){
-                print.run();
+                join.add("Buzz");
                 number++;
                 notifyAll();
             }
@@ -55,13 +56,12 @@ public class FizzBuzz {
     }
 
     /**
-     * Method to check if number is divisible by 3 and 5. Takes Runnable object as
-     * argument to print result after thread started and pass condition.
+     * Method to check if number is divisible by 3 and 5.
      */
-    public synchronized void fizzBuzz(Runnable print){
+    public synchronized void fizzBuzz(){
         while (number <= limit){
             if (number % 15 == 0){
-                print.run();
+                join.add("FizzBuzz");
                 number++;
                 notifyAll();
             }
@@ -72,13 +72,12 @@ public class FizzBuzz {
     }
 
     /**
-     * Method to check if number is divisible by neither 3 nor 5. Takes IntConsumer object as
-     * argument to print result after thread started and pass condition.
+     * Method to check if number is divisible by neither 3 nor 5.
      */
-    public synchronized void addNumber(IntConsumer print){
+    public synchronized void addNumber(){
         while (number <= limit){
             if (number % 3 != 0 && number % 5 != 0){
-                print.accept(number);
+                join.add(String.valueOf(number));
                 number++;
                 notifyAll();
             }
@@ -99,22 +98,24 @@ public class FizzBuzz {
         }
     }
 
+    public void runAll(Thread a, Thread b, Thread c, Thread d){
+        for(Thread thread : Arrays.asList(a, b, c, d)){
+            thread.start();
+        }
+    }
+
     //main
 
     public static void main(String[] args) {
 
         FizzBuzz fizzBuzz = new FizzBuzz(100);
 
-        Runnable printFizz = ()->System.out.println("Fizz");
-        Runnable printBuzz = ()->System.out.println("Buzz");
-        Runnable printFizzBuzz = ()->System.out.println("FizzBuzz");
-        IntConsumer printNumber = System.out::println;
+        Thread threadA = new Thread(fizzBuzz::fizz);
+        Thread threadB = new Thread(fizzBuzz::buzz);
+        Thread threadC = new Thread(fizzBuzz::fizzBuzz);
+        Thread threadD = new Thread(fizzBuzz::addNumber);
 
-        new Thread(() -> fizzBuzz.fizz(printFizz)).start();
-        new Thread(() -> fizzBuzz.buzz(printBuzz)).start();
-        new Thread(() -> fizzBuzz.fizzBuzz(printFizzBuzz)).start();
-        new Thread(()-> fizzBuzz.addNumber(printNumber)).start();
-
+        fizzBuzz.runAll(threadA, threadB, threadC, threadD);
 
     }
 

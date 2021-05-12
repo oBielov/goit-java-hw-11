@@ -26,7 +26,7 @@ public class SecondsCounter extends Thread{
      */
     @Override
     public void run(){
-        while(currentThread().isAlive()){
+        while(!currentThread().isInterrupted()){
             try{
                 sleep(1000);
             }catch (InterruptedException e){
